@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lotradw-postgres
+    environment:
+      POSTGRES_DB: lotradw_db
+      POSTGRES_USER: lotradw_user
+      POSTGRES_PASSWORD: lotradw_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lotradw-network
+
+  # NestJS Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: lotradw-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=lotradw_db
+      - DATABASE_USER=lotradw_user
+      - DATABASE_PASSWORD=lotradw_password
+      - JWT_SECRET=your-super-secret-jwt-key
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - lotradw-network
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: lotradw-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    networks:
+      - lotradw-network
+
+volumes:
+  postgres_data:
+
+networks:
+  lotradw-network:
+    driver: bridge

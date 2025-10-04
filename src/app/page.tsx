@@ -7,10 +7,10 @@ export default function HomePage() {
       <div className="max-w-4xl mx-auto text-center">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-orange-600 mb-6">
-            LoTraDW Logistics Platform v1.1
+            LoTraDW Logistics Platform v1.1 ✅
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Hệ thống quản lý logistics toàn diện với công nghệ hiện đại
+            Hệ thống quản lý logistics toàn diện với công nghệ hiện đại - Auto Deploy Working!
           </p>
         </div>
 

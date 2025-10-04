@@ -1,189 +1,36 @@
-# 🚚 LoTraDW - Logistics Management System
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-<div align="center">
+## Getting Started
 
-![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.0-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Node.js](https://img.shields.io/badge/Node.js-18.0-green?style=for-the-badge&logo=node.js)
+First, run the development server:
 
-**Hệ thống quản lý logistics toàn diện với giao diện hiện đại và trải nghiệm người dùng tối ưu**
-
-[🌐 Live Demo](https://lotradw-logistics.vercel.app) • [📖 Documentation](#features) • [🚀 Getting Started](#getting-started)
-
-</div>
-
-## ✨ Features
-
-### 🔐 **Authentication System**
-- Đăng nhập/đăng ký an toàn
-- Quản lý phiên đăng nhập
-- Xác thực người dùng
-
-### 📦 **Order Management**
-- Tạo và quản lý đơn hàng
-- Theo dõi trạng thái vận chuyển
-- Lịch sử đơn hàng chi tiết
-
-### 💰 **Quote Calculator**
-- Tính toán giá cước tự động
-- Nhiều loại hình vận chuyển
-- Báo giá nhanh và chính xác
-
-### 🗺️ **Tracking System**
-- Theo dõi thời gian thực
-- Cập nhật vị trí liên tục
-- Thông báo trạng thái
-
-### ⭐ **Rating & Reviews**
-- Đánh giá dịch vụ
-- Phản hồi từ khách hàng
-- Cải thiện chất lượng
-
-### 👤 **Profile Management**
-- Quản lý thông tin cá nhân
-- Lịch sử giao dịch
-- Cài đặt tài khoản
-
-## 🎨 Design System
-
-- **🧡 Orange Theme**: Giao diện hiện đại với màu cam chủ đạo
-- **📱 Responsive Design**: Tối ưu cho mọi thiết bị
-- **🎯 UX/UI**: Trải nghiệm người dùng trực quan
-- **⚡ Performance**: Tốc độ tải nhanh với Next.js 15
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Framework**: Next.js 15.5.4 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Custom components with Lucide icons
-- **State Management**: React Hooks
-
-### Backend
-- **Runtime**: Node.js 18+
-- **Package Manager**: npm
-- **API**: RESTful API design
-
-### DevOps & Deployment
-- **Hosting**: Vercel
-- **Version Control**: Git & GitHub
-- **CI/CD**: Vercel automatic deployment
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18.0 trở lên
-- npm hoặc yarn
-- Git
-
-### Installation
-
-1. **Clone repository**
-   ```bash
-   git clone https://github.com/YounBon/lotradw-logistics.git
-   cd lotradw-logistics
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Frontend
-   cd frontend
-   npm install
-   
-   # Backend
-   cd ../backend
-   npm install
-   ```
-
-3. **Environment Setup**
-   ```bash
-   # Tạo file .env.local trong thư mục frontend
-   cp .env.example .env.local
-   # Cấu hình các biến môi trường cần thiết
-   ```
-
-4. **Run Development Server**
-   ```bash
-   # Frontend (Port 3000)
-   cd frontend
-   npm run dev
-   
-   # Backend (Port 5000)
-   cd backend
-   npm start
-   ```
-
-5. **Open Browser**
-   Truy cập [http://localhost:3000](http://localhost:3000)
-
-## 📁 Project Structure
-
-```
-lotradw-logistics/
-├── frontend/                 # Next.js Frontend Application
-│   ├── src/
-│   │   ├── app/             # App Router pages
-│   │   │   ├── auth/        # Authentication pages
-│   │   │   ├── orders/      # Order management
-│   │   │   ├── tracking/    # Tracking system
-│   │   │   └── ...
-│   │   ├── components/      # Reusable UI components
-│   │   ├── lib/            # Utility functions
-│   │   └── types/          # TypeScript type definitions
-│   ├── public/             # Static assets
-│   └── package.json
-├── backend/                 # Node.js Backend API
-│   ├── src/
-│   └── package.json
-├── docker-compose.yml       # Docker configuration
-└── README.md
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 🌐 Live Demo
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-**Production URL**: [https://lotradw-logistics.vercel.app](https://lotradw-logistics.vercel.app)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Demo Features
-- 🔍 Xem giao diện không cần đăng nhập
-- 📱 Test responsive design trên mobile/tablet
-- 🎨 Trải nghiệm orange theme design
-- ⚡ Performance tối ưu với Next.js
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## 🤝 Contributing
+## Learn More
 
-Chúng tôi hoan nghênh mọi đóng góp! Vui lòng:
+To learn more about Next.js, take a look at the following resources:
 
-1. Fork repository
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Mở Pull Request
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 📄 License
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Distributed under the MIT License. See `LICENSE` for more information.
+## Deploy on Vercel
 
-## 👥 Team
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- **Developer**: [YounBon](https://github.com/YounBon)
-- **Project**: LoTraDW Logistics Management System
-- **Contact**: minhphuctruong2932004@gmail.com
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - React Framework
-- [Tailwind CSS](https://tailwindcss.com/) - CSS Framework  
-- [Lucide Icons](https://lucide.dev/) - Icon Library
-- [Vercel](https://vercel.com/) - Deployment Platform
-
----
-
-<div align="center">
-
-**Made with ❤️ by [YounBon](https://github.com/YounBon)**
-
-⭐ Star this repo if you find it helpful!
-
-</div>
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

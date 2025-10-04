@@ -14,7 +14,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-2xl font-semibold mb-4 text-gray-800">Khách hàng mới</h3>
             <p className="text-gray-600 mb-4">
@@ -32,6 +32,18 @@ export default function HomePage() {
             </p>
             <Link href="/auth/signin">
               <Button variant="outline" className="w-full">Đăng nhập</Button>
+            </Link>
+          </div>
+
+          <div className="bg-orange-600 p-6 rounded-lg shadow-lg text-white">
+            <h3 className="text-2xl font-semibold mb-4">Carrier Portal</h3>
+            <p className="mb-4">
+              Xem giao diện dành cho nhà vận chuyển
+            </p>
+            <Link href="/carrier/dashboard">
+              <Button variant="outline" className="w-full border-white text-orange-600 bg-white hover:bg-gray-100">
+                Xem Carrier Portal
+              </Button>
             </Link>
           </div>
         </div>

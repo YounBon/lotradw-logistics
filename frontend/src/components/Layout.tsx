@@ -13,12 +13,17 @@ import {
     X,
     Home,
     Star,
-    MapPin
+    MapPin,
+    BarChart3,
+    Calendar,
+    Settings,
+    Users
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { cn } from '@/lib/utils';
 
-const navigation = [
+// Customer navigation
+const customerNavigation = [
     { name: 'Trang chủ', href: '/', icon: Home },
     { name: 'Tạo đơn hàng', href: '/orders/create', icon: Package },
     { name: 'Báo giá nhanh', href: '/quote', icon: Calculator },
@@ -28,14 +33,29 @@ const navigation = [
     { name: 'Tài khoản', href: '/profile', icon: User },
 ];
 
+// Carrier navigation
+const carrierNavigation = [
+    { name: 'Dashboard', href: '/carrier/dashboard', icon: Home },
+    { name: 'Quản lý đơn hàng', href: '/carrier/orders', icon: Package },
+    { name: 'Đội xe & Tài xế', href: '/carrier/fleet', icon: Truck },
+    { name: 'Lịch trình', href: '/carrier/schedule', icon: Calendar },
+    { name: 'Báo cáo', href: '/carrier/reports', icon: BarChart3 },
+    { name: 'Hồ sơ công ty', href: '/carrier/profile', icon: User },
+];
+
 export default function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // Don't show layout on auth pages
-    if (pathname.startsWith('/auth')) {
+    // Don't show layout on auth pages and carrier auth pages
+    if (pathname.startsWith('/auth') || pathname.startsWith('/carrier/sign')) {
         return <>{children}</>;
     }
+
+    // Determine which navigation to use based on the current path
+    const isCarrierPortal = pathname.startsWith('/carrier');
+    const navigation = isCarrierPortal ? carrierNavigation : customerNavigation;
+    const portalTitle = isCarrierPortal ? 'Carrier Portal' : 'LoTraDW';
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -49,7 +69,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <div className="flex h-16 items-center justify-between px-6">
                         <div className="flex items-center">
                             <Truck className="h-8 w-8 text-orange-600" />
-                            <span className="ml-2 text-xl font-bold text-gray-900">LoTraDW</span>
+                            <div className="ml-2">
+                                <span className="text-xl font-bold text-gray-900">LoTraDW</span>
+                                {isCarrierPortal && (
+                                    <p className="text-xs text-orange-600 font-medium">Carrier Portal</p>
+                                )}
+                            </div>
                         </div>
                         <Button
                             variant="ghost"
@@ -93,7 +118,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="flex min-h-0 flex-1 flex-col bg-white border-r border-gray-200">
                     <div className="flex h-16 items-center px-6">
                         <Truck className="h-8 w-8 text-orange-600" />
-                        <span className="ml-2 text-xl font-bold text-gray-900">LoTraDW</span>
+                        <div className="ml-2">
+                            <span className="text-xl font-bold text-gray-900">LoTraDW</span>
+                            {isCarrierPortal && (
+                                <p className="text-xs text-orange-600 font-medium">Carrier Portal</p>
+                            )}
+                        </div>
                     </div>
                     <nav className="flex-1 space-y-1 px-4 py-4">
                         {navigation.map((item) => {
@@ -138,9 +168,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                     <div className="flex items-center space-x-4">
                         <div className="text-sm text-gray-500">
-                            Xin chào, Khách hàng
+                            {isCarrierPortal ? 'Xin chào, Đối tác vận chuyển' : 'Xin chào, Khách hàng'}
                         </div>
-                        <Link href="/auth/signin">
+                        <Link href={isCarrierPortal ? "/carrier/signin" : "/auth/signin"}>
                             <Button variant="outline" size="sm">Đăng xuất</Button>
                         </Link>
                     </div>

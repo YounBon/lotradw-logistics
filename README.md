@@ -1,126 +1,91 @@
 # LoTraDW Logistics Platform
 
-A comprehensive logistics management system built with modern web technologies.
+Hệ thống quản lý logistics toàn diện với công nghệ hiện đại.
 
-## 🏗️ **Tech Stack**
+## Tech Stack
 
 - **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
 - **Backend**: NestJS + TypeORM + PostgreSQL
-- **Deployment**: Vercel (Frontend) + Docker (Backend)
-- **Authentication**: JWT + Passport.js
+- **Database**: PostgreSQL
+- **Deployment**: Vercel
 
-## 🚀 **Features**
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Features
 
 ### Customer Portal
-- ✅ User registration and authentication
-- ✅ Order management and tracking
-- ✅ Quote requests
-- ✅ Profile management
-- ✅ Rating and feedback system
+- User registration and authentication
+- Order management and tracking
+- Quote requests
+- Profile management
+- Rating and feedback system
 
 ### Carrier Portal
-- ✅ Carrier registration and authentication
-- ✅ Fleet management
-- ✅ Order management
-- ✅ Schedule management
-- ✅ Reports and analytics
-- ✅ Dashboard with KPIs
+- Carrier registration and login
+- Dashboard with key metrics
+- Fleet management
+- Order assignment and tracking
+- Schedule management
+- Reports and analytics
 
-## 📦 **Project Structure**
+## Environment Setup
 
-```
-📦 LoTraDW-logistics/
-├── 📁 src/                    # Frontend source code
-│   ├── 📁 app/                # Next.js App Router
-│   ├── 📁 components/         # Reusable React components
-│   ├── 📁 constants/          # Application constants
-│   ├── 📁 hooks/              # Custom React hooks
-│   ├── 📁 lib/                # Utility libraries
-│   └── 📁 types/              # TypeScript definitions
-├── 📁 backend/                # NestJS API server
-├── 📁 public/                 # Static assets
-├── 🐳 docker-compose.yml      # Database services
-├── 📋 package.json            # Dependencies & scripts
-└── 🚀 vercel.json             # Deployment config
-```
-
-## 🛠️ **Getting Started**
-
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Docker (for database)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/YounBon/lotradw-logistics.git
-   cd lotradw-logistics
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Setup environment variables**
-   ```bash
-   cp .env.example .env.local
-   # Edit .env.local with your configuration
-   ```
-
-4. **Start the database**
-   ```bash
-   docker-compose up -d postgres
-   ```
-
-5. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-6. **Open your browser**
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:3001 (when implemented)
-
-## 📜 **Available Scripts**
+Copy `.env.example` to `.env.local` and configure your environment variables:
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
+cp .env.example .env.local
 ```
 
-## 🌐 **Deployment**
+Configure the following variables:
+- Database connection URL
+- JWT secret key
+- API endpoints
 
-### Vercel (Frontend)
-The frontend is automatically deployed to Vercel when pushing to the main branch.
+## Development
 
-### Docker (Backend)
 ```bash
+# Start frontend development server
+npm run dev
+
+# Backend setup (optional)
 cd backend
-docker build -t lotradw-backend .
-docker run -p 3001:3001 lotradw-backend
+npm install
+docker-compose up -d postgres
+npm run start:dev
 ```
 
-## 🤝 **Contributing**
+## Deployment
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+The frontend application is automatically deployed to Vercel when pushing to the main branch.
 
-## 📄 **License**
+## Project Structure
 
-This project is private and proprietary.
+```
+src/
+├── app/                    # Next.js App Router
+├── components/             # Reusable components
+├── hooks/                  # Custom React hooks
+├── lib/                    # Utilities and services
+└── types/                  # TypeScript definitions
 
-## 📞 **Contact**
+backend/                    # NestJS API server
+public/                     # Static assets
+```
 
-For questions or support, please contact the development team.
+## Scripts
 
----
-
-**Built with ❤️ using Next.js and NestJS**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint

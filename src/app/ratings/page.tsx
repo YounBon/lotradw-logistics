@@ -42,8 +42,8 @@ const StarRating = ({
                     type="button"
                     onClick={() => onChange(star)}
                     className={`${size} transition-colors ${star <= value
-                            ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300 hover:text-yellow-200'
+                        ? 'text-yellow-400 fill-current'
+                        : 'text-gray-300 hover:text-yellow-200'
                         }`}
                 >
                     <Star className="w-full h-full" />
@@ -329,8 +329,8 @@ export default function RatingsPage() {
                                                         <Star
                                                             key={i}
                                                             className={`w-4 h-4 ${i < rating.rating
-                                                                    ? 'text-yellow-400 fill-current'
-                                                                    : 'text-gray-300'
+                                                                ? 'text-yellow-400 fill-current'
+                                                                : 'text-gray-300'
                                                                 }`}
                                                         />
                                                     ))}

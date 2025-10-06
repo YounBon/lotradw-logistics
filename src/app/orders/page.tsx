@@ -1,311 +1,445 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import {
-    History,
-    Download,
-    Eye,
-    Filter,
-    ChevronLeft,
-    ChevronRight,
-    Package,
-    MapPin,
-    Calendar,
-    DollarSign
-} from 'lucide-react';
+import { useState } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Plus, Minus, Package, User, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { orderService } from '@/lib/services';
-import { Order, PaginatedResponse } from '@/types';
-import { formatCurrency, getOrderStatusColor, getOrderStatusText, formatDate, downloadFile } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
-const statusOptions = [
-    { value: '', label: 'Tất cả trạng thái' },
-    { value: 'PENDING', label: 'Chờ xử lý' },
-    { value: 'CONFIRMED', label: 'Đã xác nhận' },
-    { value: 'IN_TRANSIT', label: 'Đang vận chuyển' },
-    { value: 'DELIVERED', label: 'Đã giao hàng' },
-    { value: 'CANCELLED', label: 'Đã hủy' },
+const itemSchema = z.object({
+    name: z.string().min(1, 'Tên hàng hóa không được trống'),
+    quantity: z.number().min(1, 'Số lượng phải ít nhất là 1'),
+    weight: z.number().min(0.1, 'Trọng lượng phải ít nhất 0.1kg'),
+    dimensions: z.object({
+        length: z.number().min(1, 'Chiều dài phải ít nhất 1cm'),
+        width: z.number().min(1, 'Chiều rộng phải ít nhất 1cm'),
+        height: z.number().min(1, 'Chiều cao phải ít nhất 1cm'),
+    }),
+    value: z.number().min(1000, 'Giá trị hàng hóa phải ít nhất 1,000 VND'),
+    category: z.string().min(1, 'Danh mục không được trống'),
+});
+
+const addressSchema = z.object({
+    name: z.string().min(2, 'Tên phải có ít nhất 2 ký tự'),
+    phone: z.string().regex(/^(\+84|0)[3|5|7|8|9][0-9]{8}$/, 'Số điện thoại không hợp lệ'),
+    street: z.string().min(5, 'Địa chỉ phải có ít nhất 5 ký tự'),
+    ward: z.string().min(1, 'Vui lòng chọn phường/xã'),
+    district: z.string().min(1, 'Vui lòng chọn quận/huyện'),
+    province: z.string().min(1, 'Vui lòng chọn tỉnh/thành phố'),
+    postalCode: z.string().optional(),
+});
+
+const orderSchema = z.object({
+    senderInfo: addressSchema,
+    receiverInfo: addressSchema,
+    items: z.array(itemSchema).min(1, 'Phải có ít nhất một mặt hàng'),
+    deliveryDeadline: z.string().min(1, 'Vui lòng chọn thời hạn giao hàng'),
+    notes: z.string().optional(),
+});
+
+type OrderFormData = z.infer<typeof orderSchema>;
+
+const categories = [
+    'Điện tử',
+    'Thời trang',
+    'Thực phẩm',
+    'Sách/văn phòng phẩm',
+    'Gia dụng',
+    'Mỹ phẩm',
+    'Khác'
 ];
 
-export default function OrdersPage() {
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [total, setTotal] = useState(0);
-    const [loading, setLoading] = useState(true);
+const provinces = [
+    'TP. Hồ Chí Minh',
+    'Hà Nội',
+    'Đà Nẵng',
+    'Cần Thơ',
+    'An Giang',
+    'Bà Rịa - Vũng Tàu',
+    // Add more provinces as needed
+];
+
+export default function CreateOrderPage() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [filters, setFilters] = useState({
-        status: '',
-        search: '',
+
+    const {
+        register,
+        control,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<OrderFormData>({
+        resolver: zodResolver(orderSchema),
+        defaultValues: {
+            items: [{
+                name: '',
+                quantity: 1,
+                weight: 1,
+                dimensions: { length: 1, width: 1, height: 1 },
+                value: 10000,
+                category: '',
+            }],
+        },
     });
 
-    const limit = 10;
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'items',
+    });
 
-    useEffect(() => {
-        loadOrders();
-    }, [currentPage, filters.status]);
+    const watchedItems = watch('items');
 
-    const loadOrders = async () => {
-        setLoading(true);
+    const totalWeight = watchedItems.reduce((sum, item) => sum + (item.weight * item.quantity), 0);
+    const totalValue = watchedItems.reduce((sum, item) => sum + (item.value * item.quantity), 0);
+
+    const onSubmit = async (data: OrderFormData) => {
+        setIsLoading(true);
+        setError('');
+
         try {
-            const response = await orderService.getOrders(
-                currentPage,
-                limit,
-                filters.status || undefined
-            );
-            setOrders(response.data);
-            setTotalPages(response.pagination.totalPages);
-            setTotal(response.pagination.total);
+            const order = await orderService.createOrder(data);
+            router.push(`/orders/${order.id}`);
         } catch (err: any) {
-            setError('Không thể tải danh sách đơn hàng');
+            setError(err.response?.data?.message || 'Tạo đơn hàng thất bại. Vui lòng thử lại.');
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
-
-    const handleDownloadInvoice = async (orderId: string, format: 'pdf' | 'csv') => {
-        try {
-            const blob = await orderService.downloadInvoice(orderId, format);
-            downloadFile(blob, `invoice-${orderId}.${format}`);
-        } catch (err: any) {
-            alert('Không thể tải hóa đơn. Vui lòng thử lại.');
-        }
-    };
-
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
-
-    const filteredOrders = orders.filter(order =>
-        !filters.search ||
-        order.orderNumber.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.senderInfo.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.receiverInfo.name.toLowerCase().includes(filters.search.toLowerCase())
-    );
-
-    if (loading && orders.length === 0) {
-        return (
-            <div className="flex items-center justify-center min-h-96">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-            </div>
-        );
-    }
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                    <History className="h-6 w-6 mr-2" />
-                    Lịch sử đơn hàng
-                </h1>
-                <p className="text-gray-600">Quản lý và theo dõi tất cả đơn hàng của bạn</p>
+                <h1 className="text-2xl font-bold text-gray-900">Tạo đơn hàng mới</h1>
+                <p className="text-gray-600">Điền thông tin chi tiết để tạo đơn hàng vận chuyển</p>
             </div>
 
-            {/* Filters */}
-            <Card className="mb-6">
-                <CardHeader>
-                    <CardTitle className="flex items-center">
-                        <Filter className="h-5 w-5 mr-2" />
-                        Bộ lọc
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Input
-                            placeholder="Tìm kiếm theo mã đơn hàng, tên..."
-                            value={filters.search}
-                            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                        />
-
-                        <select
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            value={filters.status}
-                            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                        >
-                            {statusOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-
-                        <Button onClick={loadOrders} variant="outline">
-                            Áp dụng bộ lọc
-                        </Button>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                        {error}
                     </div>
-                </CardContent>
-            </Card>
+                )}
 
-            {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm mb-6">
-                    {error}
-                </div>
-            )}
-
-            {/* Orders List */}
-            {filteredOrders.length === 0 ? (
+                {/* Sender Info */}
                 <Card>
-                    <CardContent className="p-12 text-center">
-                        <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                            Không tìm thấy đơn hàng
-                        </h3>
-                        <p className="text-gray-600 mb-4">
-                            {filters.search || filters.status ? 'Thử thay đổi bộ lọc hoặc' : ''} tạo đơn hàng đầu tiên của bạn
-                        </p>
-                        <Link href="/orders/create">
-                            <Button>Tạo đơn hàng mới</Button>
-                        </Link>
+                    <CardHeader>
+                        <CardTitle className="flex items-center">
+                            <User className="h-5 w-5 mr-2" />
+                            Thông tin người gửi
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Input
+                                label="Họ và tên người gửi"
+                                type="text"
+                                placeholder="Nhập họ tên"
+                                error={errors.senderInfo?.name?.message}
+                                {...register('senderInfo.name')}
+                            />
+                            <Input
+                                label="Số điện thoại"
+                                type="tel"
+                                placeholder="Nhập số điện thoại"
+                                error={errors.senderInfo?.phone?.message}
+                                {...register('senderInfo.phone')}
+                            />
+                        </div>
+                        <Input
+                            label="Địa chỉ chi tiết"
+                            type="text"
+                            placeholder="Số nhà, tên đường"
+                            error={errors.senderInfo?.street?.message}
+                            {...register('senderInfo.street')}
+                        />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Tỉnh/Thành phố
+                                </label>
+                                <select
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    {...register('senderInfo.province')}
+                                >
+                                    <option value="">Chọn tỉnh/thành phố</option>
+                                    {provinces.map((province) => (
+                                        <option key={province} value={province}>{province}</option>
+                                    ))}
+                                </select>
+                                {errors.senderInfo?.province && (
+                                    <p className="text-sm text-red-600 mt-1">{errors.senderInfo.province.message}</p>
+                                )}
+                            </div>
+                            <Input
+                                label="Quận/Huyện"
+                                type="text"
+                                placeholder="Nhập quận/huyện"
+                                error={errors.senderInfo?.district?.message}
+                                {...register('senderInfo.district')}
+                            />
+                            <Input
+                                label="Phường/Xã"
+                                type="text"
+                                placeholder="Nhập phường/xã"
+                                error={errors.senderInfo?.ward?.message}
+                                {...register('senderInfo.ward')}
+                            />
+                        </div>
                     </CardContent>
                 </Card>
-            ) : (
-                <div className="space-y-4">
-                    {filteredOrders.map((order) => (
-                        <Card key={order.id}>
-                            <CardContent className="p-6">
-                                <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
-                                    {/* Order Info */}
-                                    <div className="flex-1">
-                                        <div className="flex items-center space-x-3 mb-2">
-                                            <h3 className="text-lg font-semibold">#{order.orderNumber}</h3>
-                                            <span className={`px-2 py-1 text-xs rounded-full ${getOrderStatusColor(order.status)}`}>
-                                                {getOrderStatusText(order.status)}
-                                            </span>
-                                        </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                                            <div className="flex items-center text-gray-600">
-                                                <MapPin className="h-4 w-4 mr-1" />
-                                                <span>{order.senderInfo.province} → {order.receiverInfo.province}</span>
-                                            </div>
+                {/* Receiver Info */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center">
+                            <MapPin className="h-5 w-5 mr-2" />
+                            Thông tin người nhận
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Input
+                                label="Họ và tên người nhận"
+                                type="text"
+                                placeholder="Nhập họ tên"
+                                error={errors.receiverInfo?.name?.message}
+                                {...register('receiverInfo.name')}
+                            />
+                            <Input
+                                label="Số điện thoại"
+                                type="tel"
+                                placeholder="Nhập số điện thoại"
+                                error={errors.receiverInfo?.phone?.message}
+                                {...register('receiverInfo.phone')}
+                            />
+                        </div>
+                        <Input
+                            label="Địa chỉ chi tiết"
+                            type="text"
+                            placeholder="Số nhà, tên đường"
+                            error={errors.receiverInfo?.street?.message}
+                            {...register('receiverInfo.street')}
+                        />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Tỉnh/Thành phố
+                                </label>
+                                <select
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    {...register('receiverInfo.province')}
+                                >
+                                    <option value="">Chọn tỉnh/thành phố</option>
+                                    {provinces.map((province) => (
+                                        <option key={province} value={province}>{province}</option>
+                                    ))}
+                                </select>
+                                {errors.receiverInfo?.province && (
+                                    <p className="text-sm text-red-600 mt-1">{errors.receiverInfo.province.message}</p>
+                                )}
+                            </div>
+                            <Input
+                                label="Quận/Huyện"
+                                type="text"
+                                placeholder="Nhập quận/huyện"
+                                error={errors.receiverInfo?.district?.message}
+                                {...register('receiverInfo.district')}
+                            />
+                            <Input
+                                label="Phường/Xã"
+                                type="text"
+                                placeholder="Nhập phường/xã"
+                                error={errors.receiverInfo?.ward?.message}
+                                {...register('receiverInfo.ward')}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
 
-                                            <div className="flex items-center text-gray-600">
-                                                <Calendar className="h-4 w-4 mr-1" />
-                                                <span>{formatDate(order.createdAt)}</span>
-                                            </div>
+                {/* Items */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <Package className="h-5 w-5 mr-2" />
+                                Thông tin hàng hóa
+                            </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => append({
+                                    name: '',
+                                    quantity: 1,
+                                    weight: 1,
+                                    dimensions: { length: 1, width: 1, height: 1 },
+                                    value: 10000,
+                                    category: '',
+                                })}
+                            >
+                                <Plus className="h-4 w-4 mr-1" />
+                                Thêm mặt hàng
+                            </Button>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        {fields.map((field, index) => (
+                            <div key={field.id} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h4 className="font-medium">Mặt hàng {index + 1}</h4>
+                                    {fields.length > 1 && (
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => remove(index)}
+                                        >
+                                            <Minus className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                </div>
 
-                                            <div className="flex items-center text-gray-600">
-                                                <DollarSign className="h-4 w-4 mr-1" />
-                                                <span>{formatCurrency(order.shippingCost)}</span>
-                                            </div>
-
-                                            <div className="flex items-center text-gray-600">
-                                                <Package className="h-4 w-4 mr-1" />
-                                                <span>{order.items.length} mặt hàng</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-2 text-sm text-gray-600">
-                                            <p><span className="font-medium">Người nhận:</span> {order.receiverInfo.name}</p>
-                                            {order.carrierName && (
-                                                <p><span className="font-medium">Nhà vận chuyển:</span> {order.carrierName}</p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Actions */}
-                                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                                        <Link href={`/orders/${order.id}`}>
-                                            <Button variant="outline" size="sm">
-                                                <Eye className="h-4 w-4 mr-1" />
-                                                Chi tiết
-                                            </Button>
-                                        </Link>
-
-                                        <div className="flex space-x-2">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => handleDownloadInvoice(order.id, 'pdf')}
-                                            >
-                                                <Download className="h-4 w-4 mr-1" />
-                                                PDF
-                                            </Button>
-
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => handleDownloadInvoice(order.id, 'csv')}
-                                            >
-                                                <Download className="h-4 w-4 mr-1" />
-                                                CSV
-                                            </Button>
-                                        </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Input
+                                        label="Tên hàng hóa"
+                                        type="text"
+                                        placeholder="VD: Laptop Dell XPS 13"
+                                        error={errors.items?.[index]?.name?.message}
+                                        {...register(`items.${index}.name`)}
+                                    />
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Danh mục
+                                        </label>
+                                        <select
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            {...register(`items.${index}.category`)}
+                                        >
+                                            <option value="">Chọn danh mục</option>
+                                            {categories.map((category) => (
+                                                <option key={category} value={category}>{category}</option>
+                                            ))}
+                                        </select>
+                                        {errors.items?.[index]?.category && (
+                                            <p className="text-sm text-red-600 mt-1">{errors.items[index]?.category?.message}</p>
+                                        )}
                                     </div>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    ))}
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <Input
+                                        label="Số lượng"
+                                        type="number"
+                                        min="1"
+                                        error={errors.items?.[index]?.quantity?.message}
+                                        {...register(`items.${index}.quantity`, { valueAsNumber: true })}
+                                    />
+                                    <Input
+                                        label="Trọng lượng (kg)"
+                                        type="number"
+                                        min="0.1"
+                                        step="0.1"
+                                        error={errors.items?.[index]?.weight?.message}
+                                        {...register(`items.${index}.weight`, { valueAsNumber: true })}
+                                    />
+                                    <Input
+                                        label="Giá trị (VND)"
+                                        type="number"
+                                        min="1000"
+                                        error={errors.items?.[index]?.value?.message}
+                                        {...register(`items.${index}.value`, { valueAsNumber: true })}
+                                    />
+                                </div>
+
+                                <div>
+                                    <p className="text-sm font-medium text-gray-700 mb-2">Kích thước (cm)</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <Input
+                                            label="Dài"
+                                            type="number"
+                                            min="1"
+                                            error={errors.items?.[index]?.dimensions?.length?.message}
+                                            {...register(`items.${index}.dimensions.length`, { valueAsNumber: true })}
+                                        />
+                                        <Input
+                                            label="Rộng"
+                                            type="number"
+                                            min="1"
+                                            error={errors.items?.[index]?.dimensions?.width?.message}
+                                            {...register(`items.${index}.dimensions.width`, { valueAsNumber: true })}
+                                        />
+                                        <Input
+                                            label="Cao"
+                                            type="number"
+                                            min="1"
+                                            error={errors.items?.[index]?.dimensions?.height?.message}
+                                            {...register(`items.${index}.dimensions.height`, { valueAsNumber: true })}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Summary */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <h4 className="font-medium mb-2">Tổng kết đơn hàng</h4>
+                            <div className="text-sm space-y-1">
+                                <p>Tổng số mặt hàng: {fields.length}</p>
+                                <p>Tổng trọng lượng: {totalWeight.toFixed(1)} kg</p>
+                                <p>Tổng giá trị: {totalValue.toLocaleString('vi-VN')} VND</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Delivery Options */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center">
+                            <Calendar className="h-5 w-5 mr-2" />
+                            Thời gian giao hàng
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <Input
+                            label="Thời hạn giao hàng"
+                            type="datetime-local"
+                            error={errors.deliveryDeadline?.message}
+                            {...register('deliveryDeadline')}
+                            min={new Date().toISOString().slice(0, 16)}
+                        />
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                Ghi chú (tùy chọn)
+                            </label>
+                            <textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                rows={3}
+                                placeholder="Ghi chú thêm về đơn hàng..."
+                                {...register('notes')}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Submit */}
+                <div className="flex space-x-4">
+                    <Button type="submit" isLoading={isLoading}>
+                        Tạo đơn hàng
+                    </Button>
+                    <Button type="button" variant="outline" onClick={() => router.back()}>
+                        Hủy bỏ
+                    </Button>
                 </div>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-                <Card className="mt-6">
-                    <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm text-gray-600">
-                                Hiển thị {((currentPage - 1) * limit) + 1} - {Math.min(currentPage * limit, total)} của {total} đơn hàng
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage <= 1}
-                                >
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-
-                                <span className="text-sm font-medium">
-                                    Trang {currentPage} / {totalPages}
-                                </span>
-
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage >= totalPages}
-                                >
-                                    <ChevronRight className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
-
-            {/* Summary Stats */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600">{total}</div>
-                        <div className="text-sm text-gray-600">Tổng đơn hàng</div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600">
-                            {orders.filter(o => o.status === 'DELIVERED').length}
-                        </div>
-                        <div className="text-sm text-gray-600">Đã giao thành công</div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600">
-                            {orders.filter(o => ['PENDING', 'CONFIRMED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(o.status)).length}
-                        </div>
-                        <div className="text-sm text-gray-600">Đang xử lý</div>
-                    </CardContent>
-                </Card>
-            </div>
+            </form>
         </div>
     );
 }

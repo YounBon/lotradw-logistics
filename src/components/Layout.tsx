@@ -43,6 +43,7 @@ const carrierNavigation: NavigationItem[] = [
     { name: 'Quản lý đơn hàng', href: PATHS.CARRIER.ORDERS, icon: Package },
     { name: 'Đội xe & Tài xế', href: PATHS.CARRIER.FLEET, icon: Truck },
     { name: 'Lịch trình', href: PATHS.CARRIER.SCHEDULE, icon: Calendar },
+
     { name: 'Báo cáo', href: PATHS.CARRIER.REPORTS, icon: BarChart3 },
     { name: 'Hồ sơ công ty', href: PATHS.CARRIER.PROFILE, icon: User },
 ];

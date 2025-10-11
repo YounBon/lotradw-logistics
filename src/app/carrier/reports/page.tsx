@@ -330,10 +330,10 @@ export default function CarrierReportsPage() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${vehicle.onTimeRate >= 95
-                                            ? 'bg-green-100 text-green-800'
-                                            : vehicle.onTimeRate >= 90
-                                                ? 'bg-yellow-100 text-yellow-800'
-                                                : 'bg-red-100 text-red-800'
+                                                ? 'bg-green-100 text-green-800'
+                                                : vehicle.onTimeRate >= 90
+                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                    : 'bg-red-100 text-red-800'
                                             }`}>
                                             {vehicle.onTimeRate}%
                                         </span>
@@ -567,8 +567,8 @@ export default function CarrierReportsPage() {
                     <button
                         onClick={() => setSelectedReport('overview')}
                         className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${selectedReport === 'overview'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Tổng quan
@@ -576,8 +576,8 @@ export default function CarrierReportsPage() {
                     <button
                         onClick={() => setSelectedReport('performance')}
                         className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${selectedReport === 'performance'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Hiệu suất
@@ -585,8 +585,8 @@ export default function CarrierReportsPage() {
                     <button
                         onClick={() => setSelectedReport('financial')}
                         className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${selectedReport === 'financial'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Tài chính
@@ -594,8 +594,8 @@ export default function CarrierReportsPage() {
                     <button
                         onClick={() => setSelectedReport('fleet')}
                         className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${selectedReport === 'fleet'
-                            ? 'bg-white text-gray-900 shadow-sm'
-                            : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Đội xe

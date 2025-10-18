@@ -220,6 +220,7 @@ Giám sát: Admin có thể đổi role hoặc khóa user nếu vi phạm.
 | Admin dashboard            | Duyệt carrier và quản lý quyền người dùng |
 🌐 CHỨC NĂNG CHUYỂN NGÔN NGỮ (LANGUAGE SWITCHER)
 🎯 Mục tiêu
+*Giao diện hoàn toàn thuần tiếng việt cho các page việt và thuần tiếng anh cho các page anh. Mặc định sẽ là tiếng việt. Có thể chuyển đổi ngôn ngữ ngay từ trang đăng nhập/đăng ký.
 Cho phép người dùng chuyển đổi giao diện giữa Tiếng Việt (vi) và Tiếng Anh (en) ngay trong ứng dụng web.
 Trạng thái ngôn ngữ sẽ được lưu lại để duy trì khi tải lại trang.
 ⚙️ 1️⃣ Công nghệ & thư viện sử dụng
@@ -320,3 +321,11 @@ export default function LoginPage() {
     </div>
   );
 }
+Lệnh chạy backend: node .\backend\dist\main.js
+Lệnh chạy frontend: npm run dev
+Lệnh up code lên git: 
+1. git checkout phuc
+2. git add .
+3. git commit -m "Update: push full project LoTraDW logistics"
+4. git push -u origin phuc
+

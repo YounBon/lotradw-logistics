@@ -1,8 +1,7 @@
-import AdminSidebar from '@/components/admin/AdminSidebar';
-import AdminHeader from '@/components/admin/AdminHeader';
 import { redirect } from 'next/navigation';
+import CarrierSidebar from '@/components/carrier/CarrierSidebar';
+import CarrierHeader from '@/components/carrier/CarrierHeader';
 
-// Server-side Admin layout - perform server-side auth check to avoid client overlay flash.
 async function getCurrentUserServer() {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || '';
     const url = apiBase ? `${apiBase}/auth/me` : '/auth/me';
@@ -11,37 +10,31 @@ async function getCurrentUserServer() {
         const res = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            // include cookies if the app is configured to use them
             credentials: 'include',
             cache: 'no-store',
         });
-
         if (!res.ok) return null;
-
         const body = await res.json();
-        // backend might return { user } or the user object directly
         return body.user ?? body;
-    } catch (err) {
+    } catch {
         return null;
     }
 }
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function CarrierLayout({ children }: { children: React.ReactNode }) {
     const user: any = await getCurrentUserServer();
-    if (!user || user.role !== 'admin') {
-        // Not authenticated as admin -> redirect to signin
+    if (!user || user.role !== 'carrier') {
         redirect('/auth/signin');
     }
 
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-                {/* AdminSidebar is a client component and will hydrate on the client */}
-                <AdminSidebar pathname={''} />
+                <CarrierSidebar pathname={''} />
             </div>
 
             <div className="lg:pl-64">
-                <AdminHeader />
+                <CarrierHeader />
 
                 <main className="py-6">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

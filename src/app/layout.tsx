@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Layout from '@/components/Layout';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,19 +17,12 @@ export const metadata: Metadata = {
   description: "A comprehensive logistics management platform built with modern web technologies.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+// Minimal root HTML shell. Do not include navigation or role-specific UI here.
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Layout>
-          {children}
-        </Layout>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
       </body>
     </html>
   );

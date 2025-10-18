@@ -38,16 +38,13 @@ export default function SignInPage() {
 
         try {
             const res = await authService.signIn(data);
-            // Prefer using returned user from signin response; fallback to / if missing
             const user = (res as any)?.user ?? null;
             if (user?.role === 'admin') {
                 router.push('/admin/dashboard');
             } else if (user?.role === 'carrier') {
-                // If carrier has active flag, send to carrier dashboard; otherwise fallback
                 if ((user as any)?.is_active) {
                     router.push('/carrier/dashboard');
                 } else {
-                    // Carrier not active yet - go to home and show message (optional)
                     router.push('/');
                 }
             } else {

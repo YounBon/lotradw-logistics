@@ -26,10 +26,13 @@ let AuthService = class AuthService {
     }
     async login(loginDto) {
         const { email, password } = loginDto;
+        // NOTE: originally code filtered by role CUSTOMER here which prevented
+        // admin/carrier users from signing in. Remove the hard role filter so
+        // users are located by email + active status only. Role-based access
+        // is still enforced by route guards after signin.
         const user = await this.userRepository.findOne({
             where: {
                 email,
-                role: user_entity_1.UserRole.CUSTOMER,
                 status: 'active',
             },
         });
@@ -49,6 +52,8 @@ let AuthService = class AuthService {
             role: user.role,
         };
         const token = this.jwtService.sign(payload);
+        // Return accessToken for frontend compatibility. Keep `token` as well
+        // to preserve any existing consumers that read that field.
         return {
             success: true,
             data: {
@@ -58,6 +63,8 @@ let AuthService = class AuthService {
                     role: user.role,
                     status: user.status,
                 },
+                accessToken: token,
+                refreshToken: null,
                 token,
             },
         };
@@ -68,6 +75,6 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        jwt_1.JwtService])
+    jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

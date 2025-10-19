@@ -200,14 +200,21 @@ export default function Layout({ children }: LayoutProps) {
                     </Button>
 
                     <div className="flex items-center space-x-4">
-                        <div className="text-sm text-gray-500">
-                            {userGreeting}
-                        </div>
-                        <Link href={signInPath}>
-                            <Button variant="outline" size="sm">
-                                Đăng xuất
-                            </Button>
-                        </Link>
+                        {/* When on public site pages, show Login / Register buttons on top-right */}
+                        {(!pathname.startsWith('/admin') && !pathname.startsWith('/carrier')) ? (
+                            <div className="flex items-center space-x-2">
+                                <Link href="/auth/signin">
+                                    <Button variant="ghost" size="sm">Đăng nhập</Button>
+                                </Link>
+                                <Link href="/auth/signup">
+                                    <Button size="sm">Đăng ký</Button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="text-sm text-gray-500">
+                                {userGreeting}
+                            </div>
+                        )}
                     </div>
                 </div>
 

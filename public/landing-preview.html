@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LoTraDW - Landing Preview</title>
+    <style>
+        body {
+            font-family: Inter, "Noto Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            line-height: 1.5;
+            color: #0f172a;
+            margin: 0
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .logo .badge {
+            width: 44px;
+            height: 44px;
+            background: #fb923c;
+            color: #fff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700
+        }
+
+        .nav a {
+            margin: 0 10px;
+            color: #374151;
+            text-decoration: none
+        }
+
+        .hero {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            padding: 40px 0
+        }
+
+        .hero h1 {
+            color: #C2410C;
+            font-size: 40px;
+            margin: 0 0 12px;
+            font-weight: 700
+        }
+
+        .hero p {
+            margin: 0 0 18px;
+            color: #475569
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background: #fb923c;
+            color: white;
+            text-decoration: none
+        }
+
+        .btn.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 24px
+        }
+
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06)
+        }
+
+        .kpi {
+            display: flex;
+            gap: 24px;
+            justify-content: space-between;
+            padding: 20px;
+            background: #fff7ed;
+            border-radius: 10px;
+            margin-top: 20px
+        }
+
+        .roles {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 20px
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 20px 0;
+            color: #6b7280;
+            border-top: 1px solid #e6e7eb
+        }
+
+        @media (max-width:900px) {
+            .hero {
+                flex-direction: column
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .roles {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="badge">LD</div>
+                <div>
+                    <div style="font-weight:700">LoTraDW</div>
+                    <div style="font-size:12px;color:#6b7280">Logistics & Data Warehouse</div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#features">Tính năng</a>
+                <a href="#benefits">Lợi ích</a>
+                <a href="#clients">Khách hàng</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Liên hệ</a>
+                <a class="btn" href="#contact">Nhận demo miễn phí</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div style="flex:1">
+                    <h1>Tiết kiệm đến 20% chi phí vận tải</h1>
+                    <p>LoTraDW — Hệ thống quản lý vận tải & Data Warehouse tích hợp AI giúp tối ưu hoá hoạt động vận tải
+                        từ đầu tới cuối.</p>
+                    <a class="btn" href="/auth/signin">Đăng nhập</a>
+                    <a class="btn outline" style="margin-left:8px" href="/auth/signup">Đăng ký</a>
+
+                    <ul style="margin-top:18px;color:#475569">
+                        <li>Quản lý toàn trình vận chuyển, tracking realtime</li>
+                        <li>Tối ưu lộ trình bằng AI & Machine Learning</li>
+                        <li>Tích hợp ERP/WMS/OMS và hóa đơn điện tử</li>
+                    </ul>
+                </div>
+                <div style="width:480px">
+                    <img src="/images/landing/dashboard-sample.jpg" alt="Mẫu giao diện bảng điều khiển LoTraDW"
+                        style="width:100%;border-radius:10px;display:block;" />
+                    <div style="font-size:13px;color:#6b7280;margin-top:8px">Mẫu giao diện bảng điều khiển: quản lý đơn
+                        hàng, chi phí và KPI</div>
+                </div>
+            </section>
+
+            <section id="features">
+                <h2 style="font-size:20px">Tính năng nổi bật</h2>
+                <div class="grid" style="margin-top:12px">
+                    <div class="card">
+                        <div style="font-size:24px">🚚</div>
+                        <h3>Quản lý toàn trình vận chuyển</h3>
+                        <p style="color:#6b7280">Theo dõi real-time, cập nhật trạng thái tự động và thông báo kịp thời
+                        </p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:24px">🧭</div>
+                        <h3>Tối ưu lộ trình</h3>
+                        <p style="color:#6b7280">Thuật toán AI đề xuất lộ trình tối ưu, giảm thời gian và chi phí</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:24px">💳</div>
+                        <h3>Tự động hóa chi phí</h3>
+                        <p style="color:#6b7280">Hóa đơn điện tử, lưu trữ an toàn và báo cáo chi phí tự động</p>
+                    </div>
+                    <div class="card">
+                        <div style="font-size:24px">📊</div>
+                        <h3>Báo cáo thông minh</h3>
+                        <p style="color:#6b7280">Dashboard trực quan với KPI real-time và phân tích xu hướng</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="benefits">
+                <div class="kpi">
+                    <div>
+                        <div style="font-weight:800;color:#c2410c">150+</div>
+                        <div style="font-size:13px">Doanh nghiệp tin dùng</div>
+                    </div>
+                    <div>
+                        <div style="font-weight:800;color:#c2410c">24,000+</div>
+                        <div style="font-size:13px">Xe được quản lý</div>
+                    </div>
+                    <div>
+                        <div style="font-weight:800;color:#c2410c">250,000+</div>
+                        <div style="font-size:13px">Chuyến hàng / tháng</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 style="font-size:20px;margin-top:18px">Giao diện theo vai trò</h2>
+                <div class="roles">
+                    <div class="card">
+                        <h3>Quản trị viên</h3>
+                        <ul style="color:#6b7280">
+                            <li>Toàn quyền quản lý hệ thống</li>
+                            <li>Báo cáo tổng hợp</li>
+                            <li>Phân quyền người dùng</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Điều phối viên</h3>
+                        <ul style="color:#6b7280">
+                            <li>Lập kế hoạch vận chuyển</li>
+                            <li>Phân chuyến tự động</li>
+                            <li>Theo dõi realtime</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Tài xế</h3>
+                        <ul style="color:#6b7280">
+                            <li>Nhận lệnh nhanh</li>
+                            <li>Xác nhận ePOD</li>
+                            <li>Cập nhật trạng thái</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Khách hàng</h3>
+                        <ul style="color:#6b7280">
+                            <li>Theo dõi đơn hàng</li>
+                            <li>Nhận thông báo</li>
+                            <li>Xem lịch sử & hóa đơn</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <h2 style="font-size:20px;margin-top:24px">Liên hệ & Nhận tư vấn</h2>
+                <div style="display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:12px">
+                    <div>
+                        <p style="color:#6b7280">Để lại thông tin, chúng tôi sẽ liên hệ và tư vấn giải pháp phù hợp với
+                            mô hình vận tải của bạn.</p>
+                        <p style="margin-top:12px;color:#374151">Hotline: 0938 545 272<br />Email:
+                            marketing@lotradw.local</p>
+                    </div>
+                    <div
+                        style="background:white;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,42,0.06)">
+                        <form>
+                            <input placeholder="Tên công ty"
+                                style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:6px"
+                                required />
+                            <input placeholder="Người liên hệ"
+                                style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:6px"
+                                required />
+                            <input placeholder="Email" type="email"
+                                style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:6px"
+                                required />
+                            <input placeholder="Số điện thoại"
+                                style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:6px"
+                                required />
+                            <textarea placeholder="Ghi chú (tối đa 500 ký tự)"
+                                style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:6px;height:100px"></textarea>
+                            <button class="btn" style="width:100%;margin-top:8px">Gửi yêu cầu</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <div style="font-weight:700">LoTraDW</div>
+                    <div style="font-size:13px;color:#6b7280">Hệ sinh thái quản lý vận tải & Data Warehouse</div>
+                </div>
+                <div style="text-align:right;color:#6b7280;font-size:13px">© 2025 LoTraDW</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+
+</html>

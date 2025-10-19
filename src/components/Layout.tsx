@@ -132,8 +132,8 @@ export default function Layout({ children }: LayoutProps) {
     const pathname = usePathname();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // Don't show layout on auth pages
-    const isAuthPage = pathname.startsWith('/auth') || pathname.startsWith('/carrier/sign');
+    // Don't show layout on auth pages or on the public homepage (landing page)
+    const isAuthPage = pathname === '/' || pathname.startsWith('/auth') || pathname.startsWith('/carrier/sign');
     if (isAuthPage) {
         return <>{children}</>;
     }

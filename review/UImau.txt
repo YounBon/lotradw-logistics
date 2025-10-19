@@ -1,0 +1,107 @@
+UImau - Mẫu giao diện trang giới thiệu cho LoTraDW (dựa trên ý tưởng từ smartlog-stm.com)
+
+Mục tiêu: Tạo một trang giới thiệu (landing page) cho hệ thống Logistics/Data Warehouse LoTraDW, nhấn mạnh vào: tiết kiệm chi phí, tối ưu lộ trình, quản lý chuỗi vận tải đầu-cuối, tích hợp dữ liệu, AI/ML, tính mở rộng và phân quyền người dùng.
+
+Ngôn ngữ: Tiếng Việt (Chuẩn) - Nội dung copy tóm tắt và đề xuất layout để dễ chuyển thành Next.js + Tailwind UI.
+
+1. Header (Navbar)
+- Logo (trái) và menu chính (giữa/ phải): Giải pháp, Tính năng, Khách hàng, Báo cáo & KPI, Giá cả, Tài liệu, Liên hệ
+- CTA nổi bật: "Nhận demo miễn phí" (primary) và "Gọi ngay: 0938 545 272" (secondary)
+- Micro: nút chuyển ngôn ngữ (vi/en) nhỏ ở góc
+- Sticky top khi scroll
+
+2. Hero (Phần đầu ấn tượng)
+- H1 lớn: "Tiết kiệm đến 20% chi phí vận tải"
+- H2/Subtitle: "LoTraDW — Hệ thống quản lý vận tải & Data Warehouse tối ưu cho doanh nghiệp Việt Nam"
+- 3-4 bullet ngắn dưới H2: "Quản lý toàn trình → Tối ưu lộ trình → Tự động hóa chi phí → Báo cáo thời gian thực"
+- Visual: ảnh mockup Dashboard + phone app (side-by-side)
+- CTAs: "Nhận demo miễn phí" (primary) và "Yêu cầu gọi lại" (secondary)
+
+3. Value propositions / Key Features (3-4 columns)
+- Quản lý toàn trình vận chuyển: Real-time tracking, trạng thái tự động, thông báo
+- Tối ưu lộ trình vận chuyển: Lập kế hoạch tự động bằng AI, giảm chi phí
+- Tự động tính toán chi phí & hóa đơn: e-Invoice, lưu trữ an toàn
+- Ra quyết định tức thời: Báo cáo chi tiết, phân tích xu hướng
+- Mỗi item kèm icon + 1 dòng mô tả ngắn
+
+4. Technology & Highlights (tri-column hoặc grid)
+- Công nghệ 4.0: AI, Machine Learning, IoT (GPS, cảm biến), Dashboard thông minh
+- Hightlight: "AI Powered", "Real-time", "Tích hợp ERP/WMS/OMS" + ảnh minh họa bản đồ tuyến hoặc dashboard
+
+5. Benefits / Metrics (strip with bg)
+- KPI numbers: "150+ doanh nghiệp", "24,000+ xe quản lý", "250,000+ chuyến/tháng"
+- Short bullets: "Tiết kiệm 5-20% chi phí", "Tự động hoá 95%", "100% tracking xuyên suốt"
+- Thiết kế: big numbers + small descriptions
+
+6. End-to-end Transport Chain (section)
+- Title: "Quản lý chuỗi vận tải đầu-cuối" + short para
+- 3 features with icons: Tải đơn nhanh (ERP Sync), Điều phối & kiểm soát (Phân chuyến tự động, Giám sát realtime), Dữ liệu sao lưu (Bảo mật, backup)
+- Optional: small carousel of screenshots
+
+7. Roles & Screens (cards for personas)
+- Admin: Quản lý, báo cáo, phân quyền
+- Điều phối viên: Lập kế hoạch, theo dõi, xử lý sự cố
+- Tài xế: Ứng dụng mobile, nhận lệnh, ePOD
+- Khách hàng: Theo dõi đơn hàng, thông báo, lịch sử
+- Each card: title, 3 bullets, small screenshot
+
+8. Integrations & Ecosystem
+- Icons/mini flow: ERP ↔ STM ↔ WMS ↔ OMS ↔ TMĐT ↔ Hóa đơn điện tử ↔ GPS
+- Note: "Dễ tích hợp, API sẵn sàng, hỗ trợ migration dữ liệu từ Excel"
+
+9. Case Studies / Trusted by
+- Logo grid of clients
+- Short CTA: "Khám phá dự án đã triển khai"
+
+10. FAQ
+- 6-8 common Q&A items (có sẵn từ trang gốc): tiết kiệm chi phí, tích hợp ERP, app mobile, loại hình vận tải, bảo mật, mở rộng
+
+11. Contact / Demo Form
+- Left: short pitch + contact info (hotline, email, offices)
+- Right: form fields: Tên công ty, Người liên hệ, Email, Số điện thoại, Sản phẩm quan tâm (STM, SWM, SOM, STX, COS), Kênh biết tới, Ghi chú
+- CTA: "Nhận tư vấn ngay"
+- Validation: required fields, max 500 chars notes
+
+12. Footer
+- Company info, addresses, social links, legal, privacy
+- Small logos/awards
+
+13. Microcopy & Accessibility
+- All buttons have aria-labels
+- Images: alt text
+- Color contrast: ensure AA
+- Responsive: Stack sections vertically on small screens, collapse nav into hamburger
+
+14. Visual / UI design notes
+- Palette: primary (deep blue), accent (green/teal), neutral grays, white bg
+- Typography: H1 large, H2 medium, body readable (16px)
+- Components: HeroCards, FeatureGrid, KPIBar, RoleCards, IntegrationFlow, TestimonialSlider, FAQ Accordion, ContactForm
+- Spacing: Generous whitespace for enterprise tone
+- Button styles: Primary solid, Secondary outline, Ghost for tertiary
+
+15. Suggested content (Vietnamese copy snippets)
+- H1: "Tiết kiệm đến 20% chi phí vận tải"
+- Subtitle: "LoTraDW — Hệ thống quản lý vận tải & Data Warehouse tích hợp AI giúp tối ưu hoá hoạt động vận tải từ đầu tới cuối."
+- Hero CTA: "Nhận demo miễn phí"
+- Feature short texts:
+  - Quản lý toàn trình: "Theo dõi real-time, cập nhật trạng thái tự động và thông báo kịp thời."
+  - Tối ưu lộ trình: "Thuật toán AI đề xuất lộ trình tối ưu, giảm thời gian và chi phí." 
+  - Tự động hóa chi phí: "Hóa đơn điện tử, lưu trữ an toàn và báo cáo chi phí tự động."
+  - Báo cáo thông minh: "Dashboard trực quan với KPI real-time và phân tích xu hướng."
+- Contact form submit success: "Cảm ơn! Chúng tôi sẽ liên hệ trong vòng 24 giờ làm việc."
+
+16. Developer Notes (for implementation in Next.js + Tailwind)
+- Use modular components in `src/components/ui/` and pages under `src/(site)/` (consistent with project structure)
+- Images: place in `public/images/landing/` and use next/image for optimization
+- Form handling: client-side validation + backend API (POST /api/lead)
+- Analytics: integrate GA + Hotjar or similar
+- Internationalization: support `vi` and `en` via next.config.i18n or react-i18next
+
+17. Optional extras
+- Interactive map with route optimization demo (embed / canvas)
+- Short product video modal in hero
+- Live chat / chatbot widget
+- Pricing modal or slide-over
+
+Kết luận:
+File này là mẫu UI/UX landing page tập trung cho LoTraDW, dựa trên phân tích nội dung và cấu trúc của trang Smartlog STM. Bạn có muốn tôi tiếp tục và chuyển thành component React/Next.js (các file + sample page) không? Nếu có, tôi sẽ tạo các components cơ bản (Header, Hero, FeatureGrid, KPIBar, RoleCards, ContactForm) và chạy build/validation nhanh.

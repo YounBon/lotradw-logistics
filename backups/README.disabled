@@ -1,0 +1,3 @@
+This directory previously contained top-level auth pages that are now consolidated under src/app/(site)/auth.
+
+If you need to restore any page, move the corresponding file from backups (*.disabled) back to their original names.
